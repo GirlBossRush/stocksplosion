@@ -26,8 +26,10 @@ class Stocks extends Component {
       }))
   }
 
-  getVisibleStocks() {
-    const {stocks, query} = this.state
+  getVisibleStocks(query) {
+    query = query || this.state.query
+
+    const {stocks} = this.state
     const pattern = new RegExp(query, "i")
 
     function matchedQuery({name, symbol}) {
@@ -54,15 +56,39 @@ class Stocks extends Component {
       })
   }
 
+  handleQueryKey(event) {
+    let delta = {
+      38: -1, // Up arrow
+      40: 1  // Down arrow
+    }[event.keyCode]
+
+    if (!delta) return
+
+    event.preventDefault()
+
+    const {activeStockId} = this.state
+    const stocks = this.getVisibleStocks()
+    const {length} = stocks
+    const currentIndex = stocks.findIndex(({id}) => id === activeStockId)
+
+    // Implements torus cursor, wrapping around the stocks from both sides.
+    delta = currentIndex + delta
+    delta %= length
+    delta += length
+    delta %= length
+
+    this.setState({activeStockId: stocks[delta].id})
+  }
+
   handleQueryChange({target: {value}}) {
     const query = value.trim()
-    const {activeStockId} = this.state
-    const visibleStocks = this.getVisibleStocks()
+    const visibleStocks = this.getVisibleStocks(query)
+    let {activeStockId} = this.state
 
-    this.setState({
-      activeStockId: visibleStocks.length === 1 ? visibleStocks[0].id : activeStockId,
-      query
-    })
+    // Reset the cursor to the first selection.
+    if (query.length === 0 || visibleStocks.length === 1) activeStockId = visibleStocks[0].id
+
+    this.setState({activeStockId, query})
   }
 
   render() {
@@ -74,8 +100,10 @@ class Stocks extends Component {
     return <section data-component="stocks">
       <div className="stock-list">
         <input
+          autoFocus
           className="field stock-search"
           onChange={this.handleQueryChange.bind(this)}
+          onKeyDown={this.handleQueryKey.bind(this)}
           placeholder="Search by symbol or name."
           type="text"
           value={query} />
