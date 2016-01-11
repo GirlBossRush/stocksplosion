@@ -2,6 +2,7 @@ import "./stocks.styl"
 
 import React, {Component} from "react"
 import Stock from "components/stock"
+import createStockViewModel from "view-models/stock"
 
 class Stocks extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Stocks extends Component {
   componentDidMount() {
     fetch("http://stocksplosion.apsis.io/api/company")
       .then(response => response.json())
-      .then(stocks => this.setState({stocks}))
+      .then(stocks => this.setState({stocks: stocks.map(createStockViewModel)}))
   }
 
   render() {
