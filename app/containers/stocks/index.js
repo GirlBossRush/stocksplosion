@@ -26,6 +26,17 @@ class Stocks extends Component {
       }))
   }
 
+  getVisibleStocks() {
+    const {stocks, query} = this.state
+    const pattern = new RegExp(query, "i")
+
+    function matchedQuery({name, symbol}) {
+      return [name, symbol].some(criteria => criteria.search(pattern) !== -1)
+    }
+
+    return query.length > 0 ? stocks.filter(matchedQuery) : stocks
+  }
+
   fetchStockDetails(stockId) {
     const {stocks} = this.state
     const index = stocks.findIndex(stock => stock.id === stockId)
@@ -44,23 +55,21 @@ class Stocks extends Component {
   }
 
   handleQueryChange({target: {value}}) {
-    this.setState({query: value.trim()})
+    const query = value.trim()
+    const {activeStockId} = this.state
+    const visibleStocks = this.getVisibleStocks()
+
+    this.setState({
+      activeStockId: visibleStocks.length === 1 ? visibleStocks[0].id : activeStockId,
+      query
+    })
   }
 
   render() {
     if (this.state.stocks.length === 0) return this.renderPlaceholder()
 
-    const {stocks, query} = this.state
-    const pattern = new RegExp(query, "i")
-    let {activeStockId} = this.state
-
-    function matchedQuery({name, symbol}) {
-      return [name, symbol].some(criteria => criteria.search(pattern) !== -1)
-    }
-
-    const visibleStocks = query.length > 0 ? stocks.filter(matchedQuery) : stocks
-
-    activeStockId = visibleStocks.length === 1 ? visibleStocks[0].id : activeStockId
+    const {activeStockId, stocks, query} = this.state
+    const visibleStocks = this.getVisibleStocks()
 
     return <section data-component="stocks">
       <div className="stock-list">
