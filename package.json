@@ -20,6 +20,7 @@
   "dependencies": {
     "babel-core": "6.3.17",
     "babel-polyfill": "6.3.14",
+    "moment": "2.11.1",
     "normalize.css": "3.0.3",
     "react": "0.14.3",
     "react-dom": "0.14.3",
