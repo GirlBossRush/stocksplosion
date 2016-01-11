@@ -8,7 +8,8 @@ class Stock extends Component {
 
     const styles = {
       container: {
-        backgroundColor: active ? `hsl(${stock.hue}, 100%, 96%)` : ""
+        backgroundColor: active ? `hsl(${stock.hue}, 100%, 96%)` : "",
+        borderRightColor: active ? `hsl(${stock.hue}, 100%, 47%)` : ""
       },
       symbol: {
         backgroundColor: `hsl(${stock.hue}, 100%, 47%)`,
