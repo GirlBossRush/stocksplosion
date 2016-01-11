@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+  <head>
+    <title>{%=o.htmlWebpackPlugin.options.meta.title%}</title>
+    <script>
+      document.documentElement.classList.remove("no-js");
+    </script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+
+    <link href='https://fonts.googleapis.com/css?family=Oxygen+Mono' rel='stylesheet' type='text/css'>
+  </head>
+
+  <body spellcheck>
+    <main></main>
+
+    {% for (var chunk in o.htmlWebpackPlugin.files.chunks) { %}
+      <script src="{%= o.htmlWebpackPlugin.files.chunks[chunk].entry %}"></script>
+    {% } %}
+
+    <noscript class="no-js-info">
+      <h1>{%=o.htmlWebpackPlugin.options.meta.title%}</h1>
+      <p>This website requires JavaScript to retrieve content.</p>
+      <p>
+        <a href="http://enable-javascript.com" target="_blank">
+          How to enable JavaScript.
+        </a>
+      </p>
+    </noscript>
+  </body>
+</html>

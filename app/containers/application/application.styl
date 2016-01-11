@@ -1,0 +1,47 @@
+@import "~normalize.css/normalize.css"
+
+*, *:before, *:after
+ box-sizing border-box
+
+html
+  height 100%
+
+body
+  background-color #efefef
+  color #222
+  cursor default
+  display flex
+  flex-flow column nowrap
+  font-family "Oxygen Mono", sans-serif
+  line-height 1.3
+  min-height 100%
+  user-select none
+
+main
+  display flex
+  flex-flow column nowrap
+  flex 1 0 auto
+
+div, section
+  display flex
+  flex-flow column nowrap
+
+[data-selectable]
+  user-select text
+
+[data-actionable]
+  cursor pointer
+
+[data-component="application"]
+  flex 1 0 auto
+
+.field-group
+  flex-flow row
+
+  &[data-group-type="checkbox"]
+    align-items center
+    margin-bottom 0.2em
+    margin-left 1em
+a
+  color inherit
+  text-decoration inherit
