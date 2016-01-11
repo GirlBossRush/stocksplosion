@@ -1,3 +1,5 @@
+stock-search-height = 55px
+
 [data-component="stocks"]
   flex 1 0 auto
   flex-flow row
@@ -5,8 +7,23 @@
   .stock-list
     flex 1 1 50%
     flex-flow column
-    max-height 100vh
-    overflow-y scroll
+
+    .stock-search
+      height stock-search-height
+
+      &:focus
+        outline none
+
+    .stocks
+      flex-flow column
+      max-height "calc(100vh - %s)" % stock-search-height
+      overflow-y scroll
+
+    .no-results
+      display flex
+      justify-content center
+      align-items center
+      margin-top 3em
 
   .stock-detail
     flex 1 1 50%

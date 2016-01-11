@@ -1,5 +1,8 @@
 @import "~normalize.css/normalize.css"
 
+theme-black = #222
+theme-white = #fefefe
+
 *, *:before, *:after
  box-sizing border-box
 
@@ -8,7 +11,7 @@ html
 
 body
   background-color #efefef
-  color #222
+  color theme-black
   cursor default
   display flex
   flex-flow column nowrap
@@ -36,14 +39,14 @@ div, section
 
 [data-component="application"]
   flex 1 0 auto
-
-.field-group
-  flex-flow row
-
-  &[data-group-type="checkbox"]
-    align-items center
-    margin-bottom 0.2em
-    margin-left 1em
 a
   color inherit
   text-decoration inherit
+
+.field
+  background-color theme-white
+  border 1px solid #ccc
+  color theme-black
+  flex 0 0 auto
+  padding 1em
+
