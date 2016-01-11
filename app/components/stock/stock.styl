@@ -1,0 +1,23 @@
+[data-component="stock"]
+  align-items center
+  background-color #fefefe
+  flex-flow row
+
+  &:hover
+    filter brightness(98%)
+
+  & + [data-component="stock"]
+    border-top 1px solid #222
+    margin-top 1px
+
+  .symbol
+    color #fefefe
+    background-color #000
+    font-weight bold
+    padding 1em
+
+    & .primary
+      margin-left 1em
+
+  .primary
+    padding 1em

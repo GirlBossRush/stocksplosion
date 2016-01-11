@@ -1,6 +1,7 @@
 import "./stocks.styl"
 
 import React, {Component} from "react"
+import Stock from "components/stock"
 
 class Stocks extends Component {
   constructor(props) {
@@ -12,10 +13,24 @@ class Stocks extends Component {
     }
   }
 
+  componentDidMount() {
+    fetch("http://stocksplosion.apsis.io/api/company")
+      .then(response => response.json())
+      .then(stocks => this.setState({stocks}))
+  }
+
   render() {
     return <section data-component="stocks">
       <h1>Stocks</h1>
+
+      <div className="stock-list">
+        {this.renderStocks()}
+      </div>
     </section>
+  }
+
+  renderStocks() {
+    return this.state.stocks.map((spec, index) => <Stock {...spec} key={index} />)
   }
 }
 
