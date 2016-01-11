@@ -1,22 +1,28 @@
 [data-component="stock"]
   align-items center
+  cursor pointer
   background-color #fefefe
   flex-flow row
+  border-right 3px #222 solid
 
   &:hover
     filter brightness(98%)
 
+  &[data-status="active"]
+    outline 2px solid red
+
   & + [data-component="stock"]
-    border-top 1px solid #222
-    margin-top 1px
+    border-top 1px solid #ddd
 
   .symbol
     color #fefefe
     background-color #000
+    flex 0 0 auto
     padding 1em
 
     & .primary
       margin-left 1em
 
   .primary
+    flex 1 1 auto
     padding 1em
