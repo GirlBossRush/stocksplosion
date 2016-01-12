@@ -1,9 +1,9 @@
 import "./stocks.styl"
 
-import classnames from "classnames"
 import moment from "moment"
 import formatApiRequest from "helpers/format-api-request"
 import React, {Component} from "react"
+import Action from "components/action"
 import Stock from "components/stock"
 import StockDetail from "components/stock-detail"
 import createStockViewModel, {parsePrices} from "view-models/stock"
@@ -30,7 +30,7 @@ class Stocks extends Component {
         const stocks = stockData.map(createStockViewModel)
 
         this.setState({stocks})
-        this.fetchStockDetails({stockId: stocks[0].id})
+        this.setStockDetails({stockId: stocks[0].id})
       })
   }
 
@@ -47,32 +47,14 @@ class Stocks extends Component {
     return query.length > 0 ? stocks.filter(matchedQuery) : stocks
   }
 
-  fetchStockDetails({stockId, range}) {
-    range = range || this.state.range
-    stockId = stockId || this.state.activeStockId
-
-    const {stocks} = this.state
-    const index = stocks.findIndex(stock => stock.id === stockId)
-    const stock = stocks[index]
-    const url = formatApiRequest(`/${stock.symbol}`, {
-      enddate: range.end.format("YYYYMMDD"),
-      startdate: range.start.format("YYYYMMDD")
-    })
-
-    fetch(url)
-      .then(response => response.json())
-      .then(({prices}) => {
-        stocks[index].prices = parsePrices(prices)
-        this.setState({activeStockId: stock.id, stocks})
-      })
-  }
-
   handleDateChange(property, {target: {value}}) {
+    if (!value.length === 0) return
+
     const {range} = this.state
 
     range[property] = moment(value)
     this.setState({range})
-    this.fetchStockDetails({})
+    this.setStockDetails({range})
   }
 
   handleQueryChange({target: {value}}) {
@@ -81,7 +63,7 @@ class Stocks extends Component {
 
     this.setState({query})
 
-    if (visibleStocks.length === 1) this.fetchStockDetails({stockId: visibleStocks[0].id})
+    if (visibleStocks.length === 1) this.setStockDetails({stockId: visibleStocks[0].id})
   }
 
   handleQueryKey(event) {
@@ -97,18 +79,18 @@ class Stocks extends Component {
     let {activeStockId} = this.state
     const stocks = this.getVisibleStocks()
     const {length} = stocks
-    const currentIndex = stocks.findIndex(({id}) => id === activeStockId)
+    const currentIndex = stocks.findIndex(({id}) => id === activeStockId) || 0
 
     // Implements torus cursor, wrapping around the list from top and bottom.
     delta = currentIndex + delta
-    delta %= length
-    delta += length
-    delta %= length
+    delta %= length // Limit to domain to entries for positive deltas
+    delta += length // Reverse negative deltas
+    delta %= length // Limit deltas greater than domain
 
     activeStockId = stocks[delta].id
 
     this.setState({activeStockId})
-    this.fetchStockDetails({stockId: activeStockId})
+    this.setStockDetails({stockId: activeStockId})
   }
 
   render() {
@@ -116,7 +98,7 @@ class Stocks extends Component {
     const activeStock = stocks.find(({id}) => id === activeStockId)
     const visibleStocks = this.getVisibleStocks()
 
-    if (stocks.length === 0 || !activeStock) return this.renderPlaceholder()
+    if (stocks.length === 0 || !activeStock) return <div data-placeholder />
 
     return <section data-component="stocks">
       <div className="stock-list">
@@ -133,7 +115,7 @@ class Stocks extends Component {
           {visibleStocks.length > 0 ? visibleStocks.map((stock, index) => <Stock
             active={stock.id === activeStockId}
             key={index}
-            onClick={this.fetchStockDetails.bind(this, {stockId: stock.id})}
+            onClick={this.setStockDetails.bind(this, {stockId: stock.id})}
             stock={stock} />) : <div className="no-results">No results for "{query}"</div>}
         </div>
       </div>
@@ -155,21 +137,43 @@ class Stocks extends Component {
             value={range.end.format("YYYY-MM-DD")} />
 
           <div className="actions">
-            <div className={classnames({action: true, selected: activeStock.status === "buy"})}>Buy</div>
-            <div className={classnames({action: true, selected: activeStock.status === "sell"})}>Sell</div>
-            <div className={classnames({action: true, selected: activeStock.status === "hold"})}>Hold</div>
+            <Action onClick={this.setStockStatus.bind(this)} stock={activeStock} type="buy" />
+            <Action onClick={this.setStockStatus.bind(this)} stock={activeStock} type="sell" />
+            <Action onClick={this.setStockStatus.bind(this)} stock={activeStock} type="hold" />
           </div>
         </div>
 
-        <StockDetail stock={stocks.find(stock => stock.id === activeStockId)} />
+        <StockDetail stock={activeStock} />
       </div>
     </section>
   }
 
-  renderPlaceholder() {
-    return <section data-component="stocks">
-      Loading
-    </section>
+  setStockDetails({stockId, range}) {
+    range = range || this.state.range
+    stockId = stockId || this.state.activeStockId
+
+    const {stocks} = this.state
+    const index = stocks.findIndex(stock => stock.id === stockId)
+    const stock = stocks[index]
+    const url = formatApiRequest(`/${stock.symbol}`, {
+      enddate: range.end.format("YYYYMMDD"),
+      startdate: range.start.format("YYYYMMDD")
+    })
+
+    fetch(url)
+      .then(response => response.json())
+      .then(({prices}) => {
+        stocks[index].prices = parsePrices(prices)
+        this.setState({activeStockId: stock.id, stocks})
+      })
+  }
+
+  setStockStatus({stockId, status}) {
+    const {stocks} = this.state
+    const index = stocks.findIndex(({id}) => id === stockId)
+
+    Object.assign(stocks[index], {status})
+    this.setState({stocks})
   }
 }
 

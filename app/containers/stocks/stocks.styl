@@ -5,10 +5,11 @@ header-height = 55px
   flex-flow row
 
   .stock-list
-    flex 1 0 425px
+    flex 1 0 490px
     flex-flow column
 
     .stock-search
+      border-right 1px solid #ccc
       height header-height
 
       &:focus
@@ -50,3 +51,26 @@ header-height = 55px
           left 1em
           top 0
           position absolute
+
+        & + .field
+          border-left 1px solid #ccc
+
+      .action
+        background-color #000
+        color #fefefe
+        padding 1em
+
+        & + .action
+          border-left 1px solid #ccc
+
+        &.selected
+          text-decoration underline
+
+        &[data-action="buy"]
+          background hsl(120, 100%, 45%)
+
+        &[data-action="sell"]
+          background hsl(0, 100%, 45%)
+
+        &[data-action="hold"]
+          background hsl(240, 100%, 45%)
