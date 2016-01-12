@@ -166,6 +166,10 @@ class Stocks extends Component {
         stocks[index].prices = parsePrices(prices)
         this.setState({activeStockId: stock.id, stocks})
       })
+      .catch(error => {
+        alert(null, "Couldn't fetch stock details.")
+        console.error(error)
+      })
   }
 
   setStockStatus({stockId, status}) {
