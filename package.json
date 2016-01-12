@@ -1,6 +1,6 @@
 {
   "name": "stocksplosion",
-  "version": "1.0.2",
+  "version": "1.0.0",
   "description": "A tool that allows analysts to decide on the purchase of stock.",
   "main": "scripts/watch.js",
   "scripts": {
