@@ -1,5 +1,6 @@
 import "./stocks.styl"
 
+import classnames from "classnames"
 import moment from "moment"
 import formatApiRequest from "helpers/format-api-request"
 import React, {Component} from "react"
@@ -133,18 +134,26 @@ class Stocks extends Component {
       </div>
 
       <div className="stock-detail">
-        <div className="date-ranges">
+        <div className="stock-actions">
           <input
             className="field"
             onChange={this.handleDateChange.bind(this, "start")}
+            placeholder="start"
             type="date"
             value={range.start.format("YYYY-MM-DD")} />
 
           <input
             className="field"
             onChange={this.handleDateChange.bind(this, "end")}
+            placeholder="end"
             type="date"
             value={range.end.format("YYYY-MM-DD")} />
+
+          <div className="actions">
+            <div className={classnames({action: true, selected: activeStock.status === "buy"})}>Buy</div>
+            <div className={classnames({action: true, selected: activeStock.status === "sell"})}>Sell</div>
+            <div className={classnames({action: true, selected: activeStock.status === "hold"})}>Hold</div>
+          </div>
         </div>
 
         {activeStockId && <StockDetail stock={stocks.find(stock => stock.id === activeStockId)} />}

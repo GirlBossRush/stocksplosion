@@ -23,6 +23,7 @@ export function parsePrices(prices) {
 export default function createStockViewModel(stock) {
   return Object.assign({}, stock, {
     hue: getSymbolHue(stock.symbol),
+    status: "indeterminate",
     prices: []
   })
 }
