@@ -2,9 +2,13 @@
 
 Hello!
 
-Stocksplosion makes financial decisions simple. My goal was to show as much data to the user as possible and let them decide how to filter. A user can find a stock by name or symbol and act without leaving the keyboard! There's a sweet spot between visual data and mental maps that I think we've lost over time, I'd love to expand the app with Vim-like shortcuts, but maybe next time :)
+Stocksplosion makes financial decisions simple.
+My goal was to show as much data to the user as possible and let them decide how to filter.
+A user can find a stock by name or symbol and act without leaving the keyboard!
+There's a sweet spot between visual data and mental maps that I think we've lost over time, I'd love to expand the app with Vim-like shortcuts, but maybe next time :)
 
-In a second iteration I'd also like to clarify the price ranges. The scale of the data can be cleaner with a more detailed graph.
+In a second iteration I'd also like to clarify the price ranges.
+The scale of the data can be cleaner with a more detailed graph.
 
 # Tooling
 
@@ -16,7 +20,10 @@ I've limited mutable state since the pattern encourage many simple components.
 
 # Time
 
-I've spent two 8 hour sessions on this submission (150/hr, $2,400). The app reached 60% completion within the first session with little interruption. Missing pieces were stubbed with a placeholder of how I envisioned they would fit, then filled in. I estimate a quarter of the time could be shaved off with design mockups.
+I've spent two 8 hour sessions on this submission (150/hr, $2,400).
+The app reached 60% completion within the first session with little interruption.
+Missing pieces were stubbed with a placeholder of how I envisioned they would fit, then filled in.
+I estimate a quarter of the time could be shaved off with design mockups.
 
 I had a lot fun, let me know if you'd like anything clarified.
 
