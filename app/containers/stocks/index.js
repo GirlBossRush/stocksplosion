@@ -26,9 +26,12 @@ class Stocks extends Component {
   componentDidMount() {
     fetch(formatApiRequest())
       .then(response => response.json())
-      .then(stocks => this.setState({
-        stocks: stocks.map(createStockViewModel)
-      }))
+      .then(stockData => {
+        const stocks = stockData.map(createStockViewModel)
+
+        this.setState({stocks})
+        this.fetchStockDetails({stockId: stocks[0].id})
+      })
   }
 
   getVisibleStocks(query) {
@@ -75,12 +78,10 @@ class Stocks extends Component {
   handleQueryChange({target: {value}}) {
     const query = value.trim()
     const visibleStocks = this.getVisibleStocks(query)
-    let {activeStockId} = this.state
 
-    // Reset the cursor to the first selection.
-    if (query.length === 0 || visibleStocks.length === 1) activeStockId = visibleStocks[0].id
+    this.setState({query})
 
-    this.setState({activeStockId, query})
+    if (visibleStocks.length === 1) this.fetchStockDetails({stockId: visibleStocks[0].id})
   }
 
   handleQueryKey(event) {
@@ -93,25 +94,29 @@ class Stocks extends Component {
 
     event.preventDefault()
 
-    const {activeStockId} = this.state
+    let {activeStockId} = this.state
     const stocks = this.getVisibleStocks()
     const {length} = stocks
     const currentIndex = stocks.findIndex(({id}) => id === activeStockId)
 
-    // Implements torus cursor, wrapping around the stocks from both sides.
+    // Implements torus cursor, wrapping around the list from top and bottom.
     delta = currentIndex + delta
     delta %= length
     delta += length
     delta %= length
 
-    this.setState({activeStockId: stocks[delta].id})
+    activeStockId = stocks[delta].id
+
+    this.setState({activeStockId})
+    this.fetchStockDetails({stockId: activeStockId})
   }
 
   render() {
-    if (this.state.stocks.length === 0) return this.renderPlaceholder()
-
     const {activeStockId, range, stocks, query} = this.state
+    const activeStock = stocks.find(({id}) => id === activeStockId)
     const visibleStocks = this.getVisibleStocks()
+
+    if (stocks.length === 0 || !activeStock) return this.renderPlaceholder()
 
     return <section data-component="stocks">
       <div className="stock-list">
@@ -156,7 +161,7 @@ class Stocks extends Component {
           </div>
         </div>
 
-        {activeStockId && <StockDetail stock={stocks.find(stock => stock.id === activeStockId)} />}
+        <StockDetail stock={stocks.find(stock => stock.id === activeStockId)} />
       </div>
     </section>
   }
