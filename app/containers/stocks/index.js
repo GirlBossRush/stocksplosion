@@ -1,5 +1,6 @@
 import "./stocks.styl"
 
+import {sortBy} from "lodash"
 import moment from "moment"
 import formatApiRequest from "helpers/format-api-request"
 import React, {Component} from "react"
@@ -29,7 +30,7 @@ class Stocks extends Component {
     fetch(formatApiRequest())
       .then(response => response.json())
       .then(stockData => {
-        const stocks = stockData.map(createStockViewModel)
+        const stocks = sortBy(stockData.map(createStockViewModel), "name")
 
         this.setState({stocks})
         this.setStockDetails({stockId: stocks[0].id})
