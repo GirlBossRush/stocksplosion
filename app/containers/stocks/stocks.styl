@@ -1,22 +1,22 @@
-stock-search-height = 55px
+header-height = 55px
 
 [data-component="stocks"]
   flex 1 0 auto
   flex-flow row
 
   .stock-list
-    flex 1 1 50%
+    flex 1 0 400px
     flex-flow column
 
     .stock-search
-      height stock-search-height
+      height header-height
 
       &:focus
         outline none
 
     .stocks
       flex-flow column
-      max-height "calc(100vh - %s)" % stock-search-height
+      max-height "calc(100vh - %s)" % header-height
       overflow-y scroll
 
     .no-results
@@ -26,5 +26,18 @@ stock-search-height = 55px
       margin-top 3em
 
   .stock-detail
-    flex 1 1 50%
+    flex 1 1 100%
+    flex-flow column
+
+    [data-component="stock-detail"]
+      flex-flow column
+      max-height "calc(100vh - %s)" % header-height
+      overflow-y scroll
+
+    .date-ranges
+      align-items center
+      height header-height
+
+      .field
+        flex 1 1 auto
 

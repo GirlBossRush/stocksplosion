@@ -1,6 +1,6 @@
 [data-component="stock-detail"]
-  flex 1 0 auto
   background-color #fefefe
+  flex 1 0 auto
 
   .prices
     flex-flow column
@@ -12,12 +12,16 @@
       .bar
         justify-content space-between
         padding 5px 5px
+        min-width 165px
 
       .delta
-        margin 0 5px
+        margin 0 8px
 
         &[data-delta="negative"]
           color red
 
         &[data-delta="positive"]
           color green
+
+      .label
+        margin 0 5px

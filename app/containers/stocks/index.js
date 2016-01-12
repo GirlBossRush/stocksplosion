@@ -14,6 +14,10 @@ class Stocks extends Component {
     this.state = {
       activeStockId: null,
       query: "",
+      range: {
+        end: moment(),
+        start: moment().subtract(5, "year")
+      },
       stocks: []
     }
   }
@@ -39,13 +43,16 @@ class Stocks extends Component {
     return query.length > 0 ? stocks.filter(matchedQuery) : stocks
   }
 
-  fetchStockDetails(stockId) {
+  fetchStockDetails({stockId, range}) {
+    range = range || this.state.range
+    stockId = stockId || this.state.activeStockId
+
     const {stocks} = this.state
     const index = stocks.findIndex(stock => stock.id === stockId)
     const stock = stocks[index]
     const url = formatApiRequest(`/${stock.symbol}`, {
-      enddate: moment().format("YYYYMMDD"),
-      startdate: moment().subtract(5, "year").format("YYYYMMDD")
+      enddate: range.end.format("YYYYMMDD"),
+      startdate: range.start.format("YYYYMMDD")
     })
 
     fetch(url)
@@ -54,6 +61,25 @@ class Stocks extends Component {
         stocks[index].prices = parsePrices(prices)
         this.setState({activeStockId: stock.id, stocks})
       })
+  }
+
+  handleDateChange(property, {target: {value}}) {
+    const {range} = this.state
+
+    range[property] = moment(value)
+    this.setState({range})
+    this.fetchStockDetails({})
+  }
+
+  handleQueryChange({target: {value}}) {
+    const query = value.trim()
+    const visibleStocks = this.getVisibleStocks(query)
+    let {activeStockId} = this.state
+
+    // Reset the cursor to the first selection.
+    if (query.length === 0 || visibleStocks.length === 1) activeStockId = visibleStocks[0].id
+
+    this.setState({activeStockId, query})
   }
 
   handleQueryKey(event) {
@@ -80,21 +106,10 @@ class Stocks extends Component {
     this.setState({activeStockId: stocks[delta].id})
   }
 
-  handleQueryChange({target: {value}}) {
-    const query = value.trim()
-    const visibleStocks = this.getVisibleStocks(query)
-    let {activeStockId} = this.state
-
-    // Reset the cursor to the first selection.
-    if (query.length === 0 || visibleStocks.length === 1) activeStockId = visibleStocks[0].id
-
-    this.setState({activeStockId, query})
-  }
-
   render() {
     if (this.state.stocks.length === 0) return this.renderPlaceholder()
 
-    const {activeStockId, stocks, query} = this.state
+    const {activeStockId, range, stocks, query} = this.state
     const visibleStocks = this.getVisibleStocks()
 
     return <section data-component="stocks">
@@ -112,12 +127,26 @@ class Stocks extends Component {
           {visibleStocks.length > 0 ? visibleStocks.map((stock, index) => <Stock
             active={stock.id === activeStockId}
             key={index}
-            onClick={this.fetchStockDetails.bind(this, stock.id)}
+            onClick={this.fetchStockDetails.bind(this, {stockId: stock.id})}
             stock={stock} />) : <div className="no-results">No results for "{query}"</div>}
         </div>
       </div>
 
       <div className="stock-detail">
+        <div className="date-ranges">
+          <input
+            className="field"
+            onChange={this.handleDateChange.bind(this, "start")}
+            type="date"
+            value={range.start.format("YYYY-MM-DD")} />
+
+          <input
+            className="field"
+            onChange={this.handleDateChange.bind(this, "end")}
+            type="date"
+            value={range.end.format("YYYY-MM-DD")} />
+        </div>
+
         {activeStockId && <StockDetail stock={stocks.find(stock => stock.id === activeStockId)} />}
       </div>
     </section>

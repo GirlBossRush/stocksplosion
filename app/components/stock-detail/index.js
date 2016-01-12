@@ -12,14 +12,6 @@ class StockDetail extends Component {
     }
 
     return <section data-component="stock-detail">
-      <div className="symbol" style={symbolStyle}>
-        {stock.symbol}
-      </div>
-
-      <div className="primary">
-        {stock.name}
-      </div>
-
       <div className="prices">
         {this.renderPrices()}
       </div>
@@ -52,13 +44,14 @@ class StockDetail extends Component {
       return <div className="price" key={index}>
         <div className="bar" style={barStyle}>
           <div>{date.format("YYYY-MM-DD")}</div>
-          {label && <div>{label}</div>}
           <div>{value}</div>
         </div>
 
         <div className="delta" data-delta={delta > 0 ? "positive" : "negative"}>
           {delta.toFixed(2)}
         </div>
+
+        {label && <div className="label">{label}</div>}
     </div>
     })
   }
