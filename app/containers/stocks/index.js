@@ -5,7 +5,7 @@ import formatApiRequest from "helpers/format-api-request"
 import React, {Component} from "react"
 import Stock from "components/stock"
 import StockDetail from "components/stock-detail"
-import createStockViewModel from "view-models/stock"
+import createStockViewModel, {parsePrices} from "view-models/stock"
 
 class Stocks extends Component {
   constructor(props) {
@@ -51,7 +51,7 @@ class Stocks extends Component {
     fetch(url)
       .then(response => response.json())
       .then(({prices}) => {
-        stocks[index].prices = prices
+        stocks[index].prices = parsePrices(prices)
         this.setState({activeStockId: stock.id, stocks})
       })
   }

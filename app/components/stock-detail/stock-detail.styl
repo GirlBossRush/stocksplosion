@@ -1,3 +1,23 @@
 [data-component="stock-detail"]
   flex 1 0 auto
   background-color #fefefe
+
+  .prices
+    flex-flow column
+
+    .price
+      align-items center
+      margin-top 1px
+
+      .bar
+        justify-content space-between
+        padding 5px 5px
+
+      .delta
+        margin 0 5px
+
+        &[data-delta="negative"]
+          color red
+
+        &[data-delta="positive"]
+          color green
