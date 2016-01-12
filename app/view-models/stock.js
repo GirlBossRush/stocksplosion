@@ -6,7 +6,7 @@ const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 function getSymbolHue(symbol) {
   return Array
     .from(symbol.toUpperCase())
-    .reduce((accumulator, character, i) => accumulator + ALPHABET.indexOf(character) * (13 + i), 0) % 360
+    .reduce((accumulator, character, i) => accumulator + ALPHABET.indexOf(character) * (11 + i), 0) % 360
 }
 
 export function parsePrices(prices) {
