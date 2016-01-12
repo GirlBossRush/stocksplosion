@@ -4,8 +4,8 @@ import React from "react"
 
 const LABELS = {
   buy: "bought",
-  hold: "held",
-  sell: "sold"
+  sell: "sold",
+  wait: "wait"
 }
 
 export default function Stock({active, stock, onClick}) {

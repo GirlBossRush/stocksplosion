@@ -152,8 +152,8 @@ class Stocks extends Component {
 
           <div className="actions">
             <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="4" type="buy" />
-            <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="5" type="sell" />
-            <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="6" type="hold" />
+            <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="5" type="wait" />
+            <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="6" type="sell" />
           </div>
         </div>
 
