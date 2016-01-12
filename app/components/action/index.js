@@ -2,9 +2,9 @@ import classnames from "classnames"
 import {capitalize} from "lodash"
 import React from "react"
 
-export default function Action({stock, type, onClick}) {
-  function handleClick() {
-    onClick({
+export default function Action({stock, type, onAction, tabIndex}) {
+  function handleAction() {
+    onAction({
       stockId: stock.id,
       status: stock.status === type ? "indeterminate" : type // Allow setting of status
     })
@@ -14,7 +14,9 @@ export default function Action({stock, type, onClick}) {
     className={classnames({action: true, selected: stock.status === type})}
     data-action={type}
     data-actionable
-    onClick={handleClick}>
+    onClick={handleAction}
+    onKeyPress={handleAction}
+    tabIndex={tabIndex}>
     {capitalize(type)}
   </div>
 }

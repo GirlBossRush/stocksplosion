@@ -113,6 +113,7 @@ class Stocks extends Component {
           onChange={this.handleQueryChange.bind(this)}
           onKeyDown={this.handleQueryKey.bind(this)}
           placeholder="Search by symbol or name."
+          tabIndex="1"
           type="text"
           value={query} />
 
@@ -135,6 +136,7 @@ class Stocks extends Component {
             onChange={this.handleDateChange.bind(this, "start")}
             placeholder={`Start (e.g. ${moment().subtract(5, "years").format(DATE_FORMAT)})`}
             required
+            tabIndex="2"
             type="date"
             value={range.start} />
 
@@ -144,13 +146,14 @@ class Stocks extends Component {
             onChange={this.handleDateChange.bind(this, "end")}
             placeholder={`End (e.g. ${moment().format(DATE_FORMAT)})`}
             required
+            tabIndex="3"
             type="date"
             value={range.end} />
 
           <div className="actions">
-            <Action onClick={this.setStockStatus.bind(this)} stock={activeStock} type="buy" />
-            <Action onClick={this.setStockStatus.bind(this)} stock={activeStock} type="sell" />
-            <Action onClick={this.setStockStatus.bind(this)} stock={activeStock} type="hold" />
+            <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="4" type="buy" />
+            <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="5" type="sell" />
+            <Action onAction={this.setStockStatus.bind(this)} stock={activeStock} tabIndex="6" type="hold" />
           </div>
         </div>
 
