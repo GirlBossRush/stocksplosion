@@ -20,7 +20,7 @@ class Stocks extends Component {
       query: "",
       range: {
         end: moment().format(DATE_FORMAT),
-        start: moment().subtract(5, "year").format(DATE_FORMAT)
+        start: moment().subtract(1, "month").format(DATE_FORMAT)
       },
       stocks: []
     }
