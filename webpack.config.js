@@ -6,6 +6,7 @@ const ENVIRONMENT = process.env.NODE_ENV || "development"
 const resolve = require("path").resolve
 const metaAttributes = require("./app/resources/meta-attributes.json")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const webpack = require("webpack")
 
 exports.devtool = "source-map"
 
@@ -26,6 +27,9 @@ exports.output = {
 }
 
 exports.plugins = [
+  new webpack.ProvidePlugin({
+    fetch: "imports?this=>global!exports?global.fetch!whatwg-fetch"
+  }),
   new HtmlWebpackPlugin({
     template: "app/index.html",
     meta: metaAttributes
