@@ -8,6 +8,8 @@ import Stock from "components/stock"
 import StockDetail from "components/stock-detail"
 import createStockViewModel, {parsePrices} from "view-models/stock"
 
+const DATE_FORMAT = "YYYY-MM-DD"
+
 class Stocks extends Component {
   constructor(props) {
     super(props)
@@ -16,8 +18,8 @@ class Stocks extends Component {
       activeStockId: null,
       query: "",
       range: {
-        end: moment(),
-        start: moment().subtract(5, "year")
+        end: moment().format(DATE_FORMAT),
+        start: moment().subtract(5, "year").format(DATE_FORMAT)
       },
       stocks: []
     }
@@ -48,13 +50,15 @@ class Stocks extends Component {
   }
 
   handleDateChange(property, {target: {value}}) {
-    if (!value.length === 0) return
-
+    const instance = moment(value)
+    const valid = value.length === 10 && instance.isValid()
     const {range} = this.state
 
-    range[property] = moment(value)
+    range[property] = value
+
     this.setState({range})
-    this.setStockDetails({range})
+
+    if (valid) this.setStockDetails({range})
   }
 
   handleQueryChange({target: {value}}) {
@@ -124,17 +128,21 @@ class Stocks extends Component {
         <div className="stock-actions">
           <input
             className="field"
+            data-label="start"
             onChange={this.handleDateChange.bind(this, "start")}
-            placeholder="start"
+            placeholder={`Start (e.g. ${moment().subtract(5, "years").format(DATE_FORMAT)})`}
+            required
             type="date"
-            value={range.start.format("YYYY-MM-DD")} />
+            value={range.start} />
 
           <input
             className="field"
+            data-label="end"
             onChange={this.handleDateChange.bind(this, "end")}
-            placeholder="end"
+            placeholder={`End (e.g. ${moment().format(DATE_FORMAT)})`}
+            required
             type="date"
-            value={range.end.format("YYYY-MM-DD")} />
+            value={range.end} />
 
           <div className="actions">
             <Action onClick={this.setStockStatus.bind(this)} stock={activeStock} type="buy" />
@@ -156,8 +164,8 @@ class Stocks extends Component {
     const index = stocks.findIndex(stock => stock.id === stockId)
     const stock = stocks[index]
     const url = formatApiRequest(`/${stock.symbol}`, {
-      enddate: range.end.format("YYYYMMDD"),
-      startdate: range.start.format("YYYYMMDD")
+      enddate: moment(range.end).format("YYYYMMDD"),
+      startdate: moment(range.start).format("YYYYMMDD")
     })
 
     fetch(url)
@@ -167,7 +175,7 @@ class Stocks extends Component {
         this.setState({activeStockId: stock.id, stocks})
       })
       .catch(error => {
-        alert(null, "Couldn't fetch stock details.")
+        alert("Couldn't fetch stock details.")
         console.error(error)
       })
   }
