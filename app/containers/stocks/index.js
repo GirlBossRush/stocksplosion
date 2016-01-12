@@ -116,11 +116,13 @@ class Stocks extends Component {
           value={query} />
 
         <div className="stocks">
-          {visibleStocks.length > 0 ? visibleStocks.map((stock, index) => <Stock
-            active={stock.id === activeStockId}
-            key={index}
-            onClick={this.setStockDetails.bind(this, {stockId: stock.id})}
-            stock={stock} />) : <div className="no-results">No results for "{query}"</div>}
+          <div className="inner">
+            {visibleStocks.length > 0 ? visibleStocks.map((stock, index) => <Stock
+              active={stock.id === activeStockId}
+              key={index}
+              onClick={this.setStockDetails.bind(this, {stockId: stock.id})}
+              stock={stock} />) : <div className="no-results">No results for "{query}"</div>}
+          </div>
         </div>
       </div>
 

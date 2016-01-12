@@ -20,6 +20,11 @@ header-height = 55px
       max-height "calc(100vh - %s)" % header-height
       overflow-y scroll
 
+      // Fixes Safari flex calculation.
+      .inner
+        flex 0 0 auto
+        flex-flow column
+
     .no-results
       display flex
       justify-content center
@@ -34,6 +39,11 @@ header-height = 55px
       flex-flow column
       max-height "calc(100vh - %s)" % header-height
       overflow-y scroll
+
+      // Fixes Safari flex calculation.
+      .inner
+        flex 0 0 auto
+        flex-flow column
 
     .stock-actions
       align-items center

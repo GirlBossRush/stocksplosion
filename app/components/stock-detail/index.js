@@ -41,7 +41,9 @@ export default function StockDetail({stock: {hue, prices}}) {
 
   return <section data-component="stock-detail">
     <div className="prices">
-      {priceComponents}
+      <div className="inner">
+        {priceComponents}
+      </div>
     </div>
   </section>
 }
